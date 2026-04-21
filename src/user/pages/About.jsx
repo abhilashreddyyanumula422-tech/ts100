@@ -2,7 +2,15 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Building2, Award, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
+import certificate1 from "../../assets/certificate1.jpg";
+import certificate2 from "../../assets/certificate2.jpg";
+import certificate3 from "../../assets/certificate3.jpg";
+import clgImg from "../../assets/Clg-IMG.jpg";
+import ieeImg from "../../assets/IEE-IMG.jpg";
+import indiaMap from "../../assets/INDIA-MAp.jpg";
+import isoImg from "../../assets/ISO.jpg";
+import starImg from "../../assets/Star-IMG.jpg";
+import startupImg from "../../assets/Startup-IMG.jpg";
 const PRIMARY = "#3B5575";
 
 // Animations
@@ -130,6 +138,82 @@ export default function About() {
 
       </motion.section>
 
+
+{/* CERTIFICATIONS SECTION */}
+<section className="px-6 pb-20">
+  <h2 className="text-3xl font-bold text-center mb-10 text-[#3B5575]">
+    Our Recognitions & Certifications
+  </h2>
+
+  <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+
+    {[
+      { img: certificate1, title: "StartupIndia Recognition" },
+      { img: certificate2, title: "ISO Certification" },
+      { img: certificate3, title: "LLP Registration" }
+    ].map((item, index) => (
+      <motion.div
+        key={index}
+        className="bg-white rounded-2xl shadow-lg p-4 hover:scale-105 transition"
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+      >
+        <h3 className="text-center font-semibold mb-3 text-[#3B5575]">
+          {item.title}
+        </h3>
+
+        <img
+          src={item.img}
+          alt={item.title}
+          className="w-full h-[350px] object-contain rounded-lg"
+        />
+      </motion.div>
+    ))}
+
+  </div>
+</section>
+
+{/* AUTO SCROLLING IMAGES (3 VISIBLE) */}
+<section className="px-6 pb-20 overflow-hidden">
+  <h2 className="text-3xl font-bold text-center mb-10 text-[#3B5575]">
+    Our Network & Presence
+  </h2>
+
+  <div className="w-full overflow-hidden">
+    <div className="flex gap-6 animate-scroll">
+
+      {[
+        clgImg,
+        ieeImg,
+        indiaMap,
+        isoImg,
+        starImg,
+        startupImg,
+
+        // 👇 duplicate for smooth infinite loop
+        clgImg,
+        ieeImg,
+        indiaMap,
+        isoImg,
+        starImg,
+        startupImg
+      ].map((img, index) => (
+        <div
+          key={index}
+          className="min-w-[320px] bg-white rounded-2xl shadow-lg p-4"
+        >
+          <img
+            src={img}
+            alt={`img-${index}`}
+            className="w-full h-[220px] object-contain rounded-lg"
+          />
+        </div>
+      ))}
+
+    </div>
+  </div>
+</section>
+
       {/* CTA */}
       <section className="px-6 pb-20">
         <div
@@ -198,6 +282,22 @@ export default function About() {
           font-size: 14px;
           color: #94a3b8;
         }
+
+       @keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  display: flex;
+  width: max-content;
+  animation: scroll 40s linear infinite; /* 🔥 faster + smooth */
+}
+
       `}</style>
     </div>
   );

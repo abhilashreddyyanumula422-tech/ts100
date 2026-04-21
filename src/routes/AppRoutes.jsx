@@ -11,6 +11,7 @@ import FileStatus from "../user/pages/FileStatus";
 import Register from "../user/pages/Register";
 import Login from "../user/pages/Login";
 import Apply from "../user/pages/Apply";
+import BhaskarPharmacyCollege from "../user/PartnerColleges/BhaskarPharmacyCollege";
 
 /* ================= ADMIN ================= */
 import Layout from "../Admin/components/layout/Layout";
@@ -40,6 +41,10 @@ const AppRoutes = () => {
           <Route path="register" element={<Register />} />
           <Route path="login" element={<Login />} />
           <Route path="partnered-colleges" element={<Home />} />
+          <Route
+            path="partnered-colleges/bhaskar-pharmacy-college"
+            element={<BhaskarPharmacyCollege />}
+          />
         </Route>
 
         {/* ================= ADMIN ROUTES ================= */}
