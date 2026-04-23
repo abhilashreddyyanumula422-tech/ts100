@@ -30,7 +30,8 @@ export default function Contact() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://192.168.1.13:8000/api/contact/", {
+      const API_BASE = `http://${window.location.hostname}:8000`;
+      const res = await fetch(`${API_BASE}/api/contact/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -57,11 +58,11 @@ export default function Contact() {
     }
   };
   return (
-    <div className="bg-[#f8fafc] min-h-screen pt-28">
+    <div className="bg-white min-h-screen pt-28">
 
       {/* HEADER SECTION */}
       <motion.section
-        className="relative overflow-hidden bg-[#2f4a6d] py-16 md:py-20 px-4 text-center"
+        className="relative overflow-hidden bg-gradient-to-br from-[#2563eb] to-[#1d4ed8] py-16 md:py-20 px-4 text-center"
         initial="hidden"
         animate="visible"
         variants={fadeUp}
@@ -92,7 +93,7 @@ export default function Contact() {
         <div className="max-w-6xl mx-auto bg-white rounded-[30px] md:rounded-[40px] shadow-2xl shadow-blue-900/10 overflow-hidden grid grid-cols-1 lg:grid-cols-5 border border-slate-100">
 
           {/* LEFT INFO PANEL */}
-          <div className="lg:col-span-2 bg-[#2f4a6d] p-8 md:p-16 text-white space-y-8 md:space-y-12 relative overflow-hidden">
+          <div className="lg:col-span-2 bg-[#3498db] p-8 md:p-16 text-white space-y-8 md:space-y-12 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-48 md:w-64 h-48 md:h-64 bg-white/5 rounded-full -mr-24 md:-mr-32 -mt-24 md:-mt-32"></div>
 
             <div className="space-y-3 md:space-y-4">
@@ -102,7 +103,7 @@ export default function Contact() {
 
             <div className="space-y-6 md:space-y-8">
               <div className="flex items-center gap-4 md:gap-6 group">
-                <div className="w-12 h-12 md:w-14 md:h-14 bg-white/10 rounded-xl md:rounded-2xl flex items-center justify-center text-[#60a5fa] group-hover:bg-[#60a5fa] group-hover:text-[#2f4a6d] transition-all duration-300">
+                <div className="w-12 h-12 md:w-14 md:h-14 bg-white/10 rounded-xl md:rounded-2xl flex items-center justify-center text-[#2ecc71] group-hover:bg-[#2ecc71] group-hover:text-[#3498db] transition-all duration-300">
                   <FiPhone size={20} />
                 </div>
                 <div>
@@ -112,7 +113,7 @@ export default function Contact() {
               </div>
 
               <div className="flex items-center gap-4 md:gap-6 group">
-                <div className="w-12 h-12 md:w-14 md:h-14 bg-white/10 rounded-xl md:rounded-2xl flex items-center justify-center text-[#60a5fa] group-hover:bg-[#60a5fa] group-hover:text-[#2f4a6d] transition-all duration-300">
+                <div className="w-12 h-12 md:w-14 md:h-14 bg-white/10 rounded-xl md:rounded-2xl flex items-center justify-center text-[#2ecc71] group-hover:bg-[#2ecc71] group-hover:text-[#3498db] transition-all duration-300">
                   <FiMail size={20} />
                 </div>
                 <div>
@@ -122,7 +123,7 @@ export default function Contact() {
               </div>
 
               <div className="flex items-center gap-4 md:gap-6 group">
-                <div className="w-12 h-12 md:w-14 md:h-14 bg-white/10 rounded-xl md:rounded-2xl flex items-center justify-center text-[#60a5fa] group-hover:bg-[#60a5fa] group-hover:text-[#2f4a6d] transition-all duration-300">
+                <div className="w-12 h-12 md:w-14 md:h-14 bg-white/10 rounded-xl md:rounded-2xl flex items-center justify-center text-[#2ecc71] group-hover:bg-[#2ecc71] group-hover:text-[#3498db] transition-all duration-300">
                   <FiMapPin size={20} />
                 </div>
                 <div>
@@ -134,11 +135,11 @@ export default function Contact() {
 
             <div className="pt-6 md:pt-10">
               <div className="p-5 md:p-6 bg-white/5 rounded-2xl md:rounded-3xl border border-white/10 backdrop-blur-sm">
-                <FiMessageSquare className="text-[#60a5fa] mb-3 md:mb-4" size={28} />
+                <FiMessageSquare className="text-[#2ecc71] mb-3 md:mb-4" size={28} />
                 <p className="text-xs md:text-sm font-medium text-blue-100 leading-relaxed italic">
                   "The most efficient transcript service I've used. Highly recommended for international students."
                 </p>
-                <p className="mt-3 md:mt-4 text-[9px] md:text-xs font-black uppercase tracking-widest text-[#60a5fa]">— Happy Student</p>
+                <p className="mt-3 md:mt-4 text-[9px] md:text-xs font-black uppercase tracking-widest text-[#2ecc71]">— Happy Student</p>
               </div>
             </div>
           </div>
@@ -160,7 +161,7 @@ export default function Contact() {
                     value={formData.name}
                     onChange={handleChange}
                     placeholder="John Doe"
-                    className="w-full p-3.5 md:p-4 rounded-xl md:rounded-2xl bg-slate-50 border-2 border-slate-50 focus:border-[#2f4a6d] focus:bg-white outline-none font-bold transition-all text-sm md:text-base"
+                    className="w-full p-3.5 md:p-4 rounded-xl md:rounded-2xl bg-slate-50 border-2 border-slate-50 focus:border-[#2563eb] focus:bg-white outline-none font-bold transition-all text-sm md:text-base"
                   />
                 </div>
                 <div className="space-y-1 md:space-y-2">
@@ -171,7 +172,7 @@ export default function Contact() {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="john@example.com"
-                    className="w-full p-3.5 md:p-4 rounded-xl md:rounded-2xl bg-slate-50 border-2 border-slate-50 focus:border-[#2f4a6d] focus:bg-white outline-none font-bold transition-all text-sm md:text-base"
+                    className="w-full p-3.5 md:p-4 rounded-xl md:rounded-2xl bg-slate-50 border-2 border-slate-50 focus:border-[#2563eb] focus:bg-white outline-none font-bold transition-all text-sm md:text-base"
                   />
                 </div>
               </div>
@@ -199,7 +200,7 @@ export default function Contact() {
                   onChange={handleChange}
                   rows="4"
                   placeholder="How can we help you?"
-                  className="w-full p-3.5 md:p-4 rounded-xl md:rounded-2xl bg-slate-50 border-2 border-slate-50 focus:border-[#2f4a6d] focus:bg-white outline-none font-bold transition-all resize-none text-sm md:text-base"
+                  className="w-full p-3.5 md:p-4 rounded-xl md:rounded-2xl bg-slate-50 border-2 border-slate-50 focus:border-[#2563eb] focus:bg-white outline-none font-bold transition-all resize-none text-sm md:text-base"
                 />
               </div>
 

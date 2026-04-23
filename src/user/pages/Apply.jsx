@@ -1604,40 +1604,73 @@ export default function Apply() {
 
   const handlePayment = async () => {
     try {
+      // Validate applicationId exists
+      if (!applicationId) {
+        alert("No application found. Please submit an application first.");
+        return;
+      }
+
+      console.log("Creating payment order for application:", applicationId);
+      
       const res = await fetch(`${API_BASE}/api/create-order/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount: 1500, application_id: applicationId }),
       });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        console.error("Create order error:", errorData);
+        alert(`Failed to create payment order: ${errorData.error || 'Unknown error'}`);
+        return;
+      }
+
       const data = await res.json();
+      console.log("Order created:", data);
+      
       const options = {
-        key: "YOUR_KEY_ID",
+        key: "rzp_test_Sg6qpBoNrt75cC",
         amount: data.amount,
         currency: "INR",
         order_id: data.order_id,
         name: "100 Transcripts",
         description: "Document Verification Fee",
         handler: async function (response) {
-          const verifyRes = await fetch(`${API_BASE}/api/verifys/`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ ...response, application_id: applicationId }),
-          });
-          const verifyData = await verifyRes.json();
-          if (verifyData.status === "success") {
-            alert("Payment Successful ✅");
-            goStep(3);
+          console.log("Payment response:", response);
+          try {
+            const verifyRes = await fetch(`${API_BASE}/api/verifys/`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ ...response, application_id: applicationId }),
+            });
+            const verifyData = await verifyRes.json();
+            if (verifyData.status === "success") {
+              alert("Payment Successful ✅");
+              goStep(3);
+            }
+            else {
+              console.error("Payment verification failed:", verifyData);
+              alert("Payment verification failed ❌");
+            }
+          } catch (verifyErr) {
+            console.error("Verification error:", verifyErr);
+            alert("Payment verification error ❌");
           }
-          else alert("Payment Failed ❌");
         },
         prefill: { name: form.fullName, email: form.email, contact: form.phone },
         theme: { color: "#2563eb" },
+        modal: {
+          ondismiss: function() {
+            console.log("Payment modal dismissed");
+          }
+        }
       };
+      
       const rzp = new window.Razorpay(options);
       rzp.open();
     } catch (err) {
-      console.error(err);
-      alert("Payment error. Please ensure backend is running.");
+      console.error("Payment error:", err);
+      alert(`Payment error: ${err.message || 'Please ensure backend is running and try again.'}`);
     }
   };
 

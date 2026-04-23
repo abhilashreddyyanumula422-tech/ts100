@@ -55,7 +55,7 @@ const StudentRequests = () => {
       });
 
       // 2. Also Update Status in DB so student sees it on Waiting Screen
-      await updateStatus(replyingTo.id, "rejected", exactProblem);
+      await updateStatus(replyingTo.raw_id, "rejected", exactProblem);
 
       if (res.ok) {
         alert("✅ Notification sent and Status updated to Rejected");
@@ -412,7 +412,7 @@ ${companyName} Support Team` : "";
                       onChange={(e) => setSelectedStudent({ ...selectedStudent, agent: e.target.value })}
                     />
                     <button
-                      onClick={() => updateStatus(selectedStudent.id, selectedStudent.status, selectedStudent.admin_message, selectedStudent.agent)}
+                      onClick={() => updateStatus(selectedStudent.raw_id, selectedStudent.status, selectedStudent.admin_message, selectedStudent.agent)}
                       className="px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 transition"
                     >
                       Assign
@@ -424,7 +424,7 @@ ${companyName} Support Team` : "";
                 <div className="pt-6 flex gap-4 border-t border-slate-100">
                   {/* ✅ APPROVE BUTTON */}
                   <button
-                    onClick={() => updateStatus(selectedStudent.id, "approved")}
+                    onClick={() => updateStatus(selectedStudent.raw_id, "approved")}
                     disabled={selectedStudent.status === "approved"}
                     className={`flex-1 py-3 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg transition 
       ${selectedStudent.status === "approved"
@@ -438,7 +438,7 @@ ${companyName} Support Team` : "";
 
                   {/* ✅ REJECT BUTTON */}
                   <button
-                    onClick={() => updateStatus(selectedStudent.id, "rejected")}
+                    onClick={() => updateStatus(selectedStudent.raw_id, "rejected")}
                     disabled={selectedStudent.status === "rejected"}
                     className={`flex-1 py-3 rounded-2xl font-bold flex items-center justify-center gap-2 transition
                       ${selectedStudent.status === "rejected"
