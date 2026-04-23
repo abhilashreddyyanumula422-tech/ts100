@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 ]
 CORS_ALLOW_ALL_ORIGINS = True
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -50,8 +51,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',   # must be high in list
-   	'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'Transcripts.urls'

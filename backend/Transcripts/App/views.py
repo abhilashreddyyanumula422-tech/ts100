@@ -216,6 +216,11 @@ def login_user(request):
         if password == user.password:
             return Response({
                 "message": "User Login successful",
+                "type": "user",
+                "data": {
+                    "name": user.name,
+                    "email": user.email
+                }
             }, status=200)
         else:
             return Response({"error": "Invalid password"}, status=401)
@@ -496,7 +501,7 @@ def get_applications(request):
             "agent": app.agent or "Unassigned",
             "district": getattr(app, 'district', 'N/A'), # if added
             "documentsList": [
-                {"id": doc.id, "name": doc.name, "status": "Verified", "url": f"http://192.168.1.43:8000{doc.file.url}"}
+                {"id": doc.id, "name": doc.name, "status": "Verified", "url": f"http://192.168.1.13:8000{doc.file.url}"}
                 for doc in app.documents.all()
             ]
         })

@@ -9,8 +9,9 @@ import Services from "../user/pages/Services";
 import Contact from "../user/pages/Contact";
 import FileStatus from "../user/pages/FileStatus";
 import Register from "../user/pages/Register";
-import Login from "../user/pages/Login";
+import Login from "../user/pages/login";
 import Apply from "../user/pages/Apply";
+import Logout from "../user/pages/Logout";
 
 /* ✅ NEW DYNAMIC PAGE */
 import CollegePage from "../user/pages/CollegePage";
@@ -42,6 +43,7 @@ const AppRoutes = () => {
           <Route path="file-status" element={<FileStatus />} />
           <Route path="register" element={<Register />} />
           <Route path="login" element={<Login />} />
+          <Route path="logout" element={<Logout />} />
 
           {/* ✅ DYNAMIC COLLEGE ROUTE */}
           <Route path="partnered-colleges/:collegeId" element={<CollegePage />} />

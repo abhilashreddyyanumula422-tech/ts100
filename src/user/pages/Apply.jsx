@@ -732,9 +732,6 @@ function DigiLockerModal({ onClose, onFetch, targetLabel }) {
   const [selected, setSelected] = useState([]);
   const [loading, setLoading] = useState(false);
 
-
-
-
   const sendOtp = () => {
     if (aadhaar.length < 12) { alert("Please enter a valid 12-digit Aadhaar number"); return; }
     setLoading(true);
@@ -847,21 +844,6 @@ const PROC = [
   { icon: "🚚", label: "Delivery Successful", hint: "Certified docs delivered!" },
 ];
 
-/* ─────────────────────────────────────────
-   ANIMATED ROADMAP LEFT PANEL
-   White style matching the original UI
-───────────────────────────────────────── */
-
-// Each step gets a unique icon background color matching the screenshot
-const STEP_COLORS = [
-  { bg: "#e8f0fe", color: "#2563eb" },   // blue  — You Apply
-  { bg: "#fff3e0", color: "#f59e0b" },   // amber — Make Payment
-  { bg: "#fce4ec", color: "#e91e63" },   // pink  — Admin Verifies
-  { bg: "#e3f2fd", color: "#0288d1" },   // teal  — University
-  { bg: "#e8f5e9", color: "#2e7d32" },   // green — You Receive
-];
-
-// Full labels matching the user's requested journey
 const PROC_FULL = [
   { icon: "🌐", label: "Go to Website", hint: "User opens 100 Transcripts", narrative: "Starting my journey! 🌐" },
   { icon: "📤", label: "Upload Documents", hint: "Submitting digital paperwork", narrative: "Uploading my docs... 📤" },
@@ -870,7 +852,6 @@ const PROC_FULL = [
   { icon: "🚚", label: "Delivery Successful", hint: "Documents delivered safely", narrative: "Successfully Completed! 🎉" },
 ];
 
-// Extend colors for 6 steps
 const STEP_COLORS6 = [
   { bg: "#e8f0fe", color: "#2563eb" },
   { bg: "#e8f5e9", color: "#2e7d32" },
@@ -883,20 +864,16 @@ const STEP_COLORS6 = [
 function RoadmapPanel({ activeStep }) {
   const [loopIndex, setLoopIndex] = useState(0);
 
-  // Automatic looping logic to show the process "like a video"
   useEffect(() => {
     const timer = setInterval(() => {
       setLoopIndex(prev => (prev + 1) % (PROC_FULL.length + 1));
-    }, 2800); // Duration for each step to be explained
+    }, 2800);
     return () => clearInterval(timer);
   }, []);
 
-  // Visual state helpers
-  // If loopIndex === PROC_FULL.length, it's a "resetting" state or all done state
   const isVideoState = (i) => i < loopIndex;
   const isActiveVideo = (i) => i === loopIndex;
 
-  // Animation variants
   const container = {
     hidden: { opacity: 0 },
     show: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } }
@@ -910,14 +887,11 @@ function RoadmapPanel({ activeStep }) {
   return (
     <div className="image-panel" style={{ background: "#ffffff", boxShadow: "inset -1px 0 0 #f1f5f9" }}>
       <div className="image-panel-inner" style={{ padding: "18vh 24px 40px" }}>
-
-        {/* Brand Header */}
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="panel-brand">
           <h2 style={{ fontSize: 18, color: "#0f172a", marginBottom: 4 }}>Processing Roadmap</h2>
           <p style={{ fontSize: 11, color: "#3b82f6", fontWeight: 700 }}>Visual Guide • Step-by-Step</p>
         </motion.div>
 
-        {/* Narrative Roadmap */}
         <motion.div className="roadmap" variants={container} initial="hidden" animate="show">
           {PROC_FULL.map((step, i) => {
             const isDone = isVideoState(i);
@@ -926,9 +900,8 @@ function RoadmapPanel({ activeStep }) {
             const isLast = i === PROC_FULL.length - 1;
 
             return (
-              <motion.div key={i} className="rm-step" variants={itemVariant} style={{ marginBottom: 0 }}>
+              <motion.div key={i} className="rm-step" variants={itemVariant}>
                 <div className="rm-line-col">
-                  {/* Step Node */}
                   <motion.div
                     className="rm-node"
                     animate={{
@@ -946,15 +919,11 @@ function RoadmapPanel({ activeStep }) {
                     >
                       {isDone ? "✓" : i + 1}
                     </motion.div>
-
                     <span style={{ fontSize: 18, filter: !isActive && !isDone ? "grayscale(1) opacity(0.4)" : "none" }}>
                       {step.icon}
                     </span>
-
-                    {/* Narrator Removed as requested */}
                   </motion.div>
 
-                  {/* Connecting Line with Fluid Fill */}
                   {!isLast && (
                     <div className="rm-connector" style={{ background: "#f1f5f9", overflow: "visible", width: 2 }}>
                       <motion.div
@@ -968,7 +937,6 @@ function RoadmapPanel({ activeStep }) {
                           top: 0
                         }}
                       />
-                      {/* Pulse Traveler on line */}
                       {isActive && (
                         <motion.div
                           animate={{ top: ["0%", "100%"] }}
@@ -1006,28 +974,10 @@ function RoadmapPanel({ activeStep }) {
                   >
                     {step.hint}
                   </motion.div>
-
-                  {/* Removed redundant narrating badge to reduce clutter */}
                 </div>
               </motion.div>
             );
           })}
-        </motion.div>
-
-        {/* Footer info/stats */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-          style={{
-            marginTop: "auto",
-            padding: "16px",
-            background: "#f8fafc",
-            borderRadius: "16px",
-            border: "1px solid #eef2f6"
-          }}
-        >
-          {/* Removed stats box as requested */}
         </motion.div>
       </div>
     </div>
@@ -1214,7 +1164,6 @@ const Step0 = ({ form, onChange, degrees, addDeg, rmDeg, chDeg, upProg, upNames,
       upProg={upProg} upNames={upNames} upCompressed={upCompressed}
       onFile={onFile} onDelFile={delFile} onDigiLocker={onDigiLocker} />
 
-    {/* Photo Guidelines Section */}
     <div className="guideline-section">
       <div className="guideline-title">
         <span>📸</span> Important: Photo & Document Guidelines
@@ -1370,7 +1319,7 @@ const Step2 = ({ appStatus, adminMessage, goStep, onRetry }) => {
   );
 };
 
-const Step3 = ({ goStep }) => (
+const Step3 = ({ reset }) => (
   <div>
     <div className="step-header">
       <div className="step-icon icon-purple">🏛️</div>
@@ -1389,11 +1338,10 @@ const Step3 = ({ goStep }) => (
       <TlItem icon="✅" bg="#dcfce7" title="Payment Confirmed" badge="bdone" />
       <TlItem icon="✅" bg="#dcfce7" title="Document Review Cleared" badge="bdone" />
       <TlItem icon="🏛️" bg="#e0e7ff" title="University Verification — Active" desc="Official authority is processing your request." badge="bprog" />
-      <TlItem icon="🚀" bg="#f1f5f9" title="Final Delivery" desc="Digital &amp; physical copies delivered." badge="bwait" last />
+      <TlItem icon="🚀" bg="#f1f5f9" title="Final Delivery" desc="Digital & physical copies delivered." badge="bwait" last />
     </div>
     <div className="actions">
-      <button className="btn-secondary" onClick={() => goStep(2)}>← Back</button>
-      <button className="btn-primary" onClick={() => goStep(4)}>Continue &nbsp;→</button>
+      <button className="btn-primary" onClick={reset}>+ Start New Request</button>
     </div>
   </div>
 );
@@ -1439,10 +1387,19 @@ export default function Apply() {
   const [appStatus, setAppStatus] = useState("pending");
   const [adminMessage, setAdminMessage] = useState("");
 
-  const [form, setForm] = useState({
-    fullName: "", altPhone: "", email: "", phone: "",
-    requirement: "", referenceNumber: "",
-    termsAccepted: false, specialCondition: false,
+  const [form, setForm] = useState(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const userData = user?.data || {};
+    return {
+      fullName: userData.name || "",
+      altPhone: "",
+      email: userData.email || "",
+      phone: "",
+      requirement: "",
+      referenceNumber: "",
+      termsAccepted: false,
+      specialCondition: false,
+    };
   });
 
   const [upProg, setUpProg] = useState({ cmm: 0, degree: 0, internship: 0 });
@@ -1461,17 +1418,40 @@ export default function Apply() {
     }
   }, []);
 
+  // ✅ Dynamic API Base
+  const API_BASE = `http://${window.location.hostname}:8000`;
+
+  const goStep = useCallback((n) => {
+    setActiveStep(n);
+    setAnimKey(k => k + 1);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   // 🔄 Restore state on refresh
   useEffect(() => {
     const restoreState = async () => {
       const storedId = localStorage.getItem("applicationId");
+      const user = JSON.parse(localStorage.getItem("user"));
+      const userEmail = user?.data?.email;
+
+      let fetchUrl = "";
       if (storedId) {
+        fetchUrl = `${API_BASE}/api/application/${storedId}/status/`;
+      } else if (userEmail) {
+        fetchUrl = `${API_BASE}/api/application-status/?email=${userEmail}`;
+      }
+
+      if (fetchUrl) {
         try {
-          const res = await fetch(`http://192.168.1.43:8000/api/application/${storedId}/status/`);
+          const res = await fetch(fetchUrl);
           const data = await res.json();
           if (data.status) {
             setAppStatus(data.status);
             setAdminMessage(data.admin_message || "");
+            if (data.application_id) {
+              setApplicationId(data.application_id);
+              localStorage.setItem("applicationId", data.application_id);
+            }
 
             // Map status to step
             if (data.status === "approved") {
@@ -1481,6 +1461,8 @@ export default function Apply() {
               goStep(1);
             } else if (data.status === "rejected") {
               goStep(0); // Go to form to show rejection message
+            } else if (data.status === "delivered") {
+              goStep(4);
             }
           }
         } catch (err) {
@@ -1489,10 +1471,7 @@ export default function Apply() {
       }
     };
     restoreState();
-  }, []);
-
-  // ✅ Dynamic API Base
-  const API_BASE = `http://${window.location.hostname}:8000`;
+  }, [goStep, API_BASE]);
 
   // 🔄 Status Polling while in Waiting Screen (activeStep 1)
   useEffect(() => {
@@ -1505,6 +1484,11 @@ export default function Apply() {
           if (data.status) {
             setAppStatus(data.status);
             setAdminMessage(data.admin_message || "");
+            if (data.status === "approved") {
+               // keep step 1, but Step2 will show proceed to payment
+            } else if (data.status === "delivered") {
+               goStep(4);
+            }
           }
         } catch (err) {
           console.error("Polling error:", err);
@@ -1515,13 +1499,7 @@ export default function Apply() {
       interval = setInterval(checkStatus, 5000); // Check every 5 seconds
     }
     return () => clearInterval(interval);
-  }, [activeStep, applicationId]);
-
-  const goStep = useCallback((n) => {
-    setActiveStep(n);
-    setAnimKey(k => k + 1);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
+  }, [activeStep, applicationId, API_BASE, goStep]);
 
   const onChange = useCallback((e) => {
     const { name, value, type, checked } = e.target;
@@ -1578,7 +1556,6 @@ export default function Apply() {
   const handleTrack = (e) => {
     e.preventDefault();
     if (!trackId.trim()) { alert("Please enter a tracking ID"); return; }
-    // Simulated tracking check
     alert(`Searching for Application ID: ${trackId}\n\n[Demo Mode]: Current status is "Processing at University"`);
   };
 
@@ -1593,46 +1570,32 @@ export default function Apply() {
     const trackingId = "TRK" + Date.now().toString().slice(-6);
 
     try {
-      const formData = new FormData();   // ✅ IMPORTANT
-
-      // ✅ Append form fields
-      Object.keys(form).forEach(key => {
-        formData.append(key, form[key]);
-      });
-
-      // ✅ Append trackingId (optional if backend uses it)
+      const formData = new FormData();
+      Object.keys(form).forEach(key => formData.append(key, form[key]));
       formData.append("trackingId", trackingId);
-
-      // ✅ Append degrees (VERY IMPORTANT)
       formData.append("degrees", JSON.stringify(degrees));
 
-      // ✅ Append files
       Object.keys(upCompressed).forEach(type => {
         const fileData = upCompressed[type];
-        if (fileData?.file) {
-          formData.append(type, fileData.file);
-        }
+        if (fileData?.file) formData.append(type, fileData.file);
       });
 
-      // ✅ API call
-      const res = await fetch("http://192.168.1.43:8000/api/submit/", {
+      const res = await fetch(`${API_BASE}/api/submit/`, {
         method: "POST",
-        body: formData,   // ✅ now defined
+        body: formData,
       });
 
       const data = await res.json();
-
       if (res.ok) {
         alert(`Application Submitted ✅\nAdmin will now verify your documents.`);
         setApplicationId(data.application_id);
         setAppStatus("pending");
-        setAdminMessage(""); // ✅ Clear old message on re-submit
+        setAdminMessage("");
         localStorage.setItem("applicationId", data.application_id);
-        goStep(1); // Go to Waiting Screen
+        goStep(1);
       } else {
         alert(data.error || "Submission failed");
       }
-
     } catch (err) {
       console.error("❌ FRONTEND ERROR:", err);
       alert("Something went wrong");
@@ -1641,10 +1604,10 @@ export default function Apply() {
 
   const handlePayment = async () => {
     try {
-      const res = await fetch("http://192.168.1.43:8000/api/create-order/", {
+      const res = await fetch(`${API_BASE}/api/create-order/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: 1500 }),
+        body: JSON.stringify({ amount: 1500, application_id: applicationId }),
       });
       const data = await res.json();
       const options = {
@@ -1652,18 +1615,18 @@ export default function Apply() {
         amount: data.amount,
         currency: "INR",
         order_id: data.order_id,
-        name: "Your Company",
+        name: "100 Transcripts",
         description: "Document Verification Fee",
         handler: async function (response) {
-          const verifyRes = await fetch("http://192.168.1.43:8000/api/verifys/", {
+          const verifyRes = await fetch(`${API_BASE}/api/verifys/`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(response),
+            body: JSON.stringify({ ...response, application_id: applicationId }),
           });
           const verifyData = await verifyRes.json();
           if (verifyData.status === "success") {
             alert("Payment Successful ✅");
-            goStep(3); // Go to Processing/University
+            goStep(3);
           }
           else alert("Payment Failed ❌");
         },
@@ -1679,8 +1642,19 @@ export default function Apply() {
   };
 
   const reset = () => {
-    setForm({ fullName: "", altPhone: "", email: "", phone: "", requirement: "", referenceNumber: "", termsAccepted: false, specialCondition: false });
-    setDegrees([{ id: 1, type: "", university: "", course: "", college: "" }]);
+    const user = JSON.parse(localStorage.getItem("user"));
+    const userData = user?.data || {};
+    setForm({ 
+      fullName: userData.name || "", 
+      altPhone: "", 
+      email: userData.email || "", 
+      phone: "", 
+      requirement: "", 
+      referenceNumber: "", 
+      termsAccepted: false, 
+      specialCondition: false 
+    });
+    setDegrees([]);
     setUpProg({ cmm: 0, degree: 0, internship: 0 });
     setUpNames({ cmm: null, degree: null, internship: null });
     setUpCompressed({ cmm: null, degree: null, internship: null });
@@ -1691,7 +1665,7 @@ export default function Apply() {
     goStep(0);
   };
 
-  const fillPct = Math.round(((activeStep + 1) / (PROC.length - 1)) * 100);
+  const fillPct = Math.round(((activeStep + 1) / (PROC.length)) * 100);
 
   return (
     <>
@@ -1704,24 +1678,27 @@ export default function Apply() {
       )}
 
       <div className="app-shell">
-        {/* ── LEFT: Animated Roadmap Panel ── */}
         <RoadmapPanel activeStep={activeStep} />
 
-        {/* ── RIGHT: Portal ── */}
         <div className="portal-panel">
           <div className="portal-wrap">
-            {/* Process ribbon */}
             <div className="process-section">
               <div className="flow-track">
                 <div className="flow-fill" style={{ width: `${Math.min(fillPct, 100)}%` }} />
               </div>
               <div className="proc-ribbon">
                 {PROC.map((p, i) => {
-                  const stepIndex = activeStep + 1;
-                  const isDone = i < stepIndex;
-                  const isActive = i === stepIndex;
+                  const stepMap = [0, 1, 1, 3, 4]; // activeStep 0->0, 1->1, 2->1, 3->3, 4->4
+                  const mappedStep = stepMap[activeStep];
+                  const isDone = i < mappedStep || (activeStep === 2 && i <= 1);
+                  const isActive = i === mappedStep || (activeStep === 2 && i === 3); 
+                  // Correction for UI flow
+                  const uiStep = activeStep === 2 ? 3 : activeStep === 3 ? 4 : activeStep === 4 ? 5 : activeStep;
+                  const iDone = i < uiStep;
+                  const iActive = i === uiStep;
+
                   return (
-                    <div key={i} className={`proc-cell ${isDone ? "pc-done" : ""} ${isActive ? "pc-active" : ""}`}>
+                    <div key={i} className={`proc-cell ${iDone ? "pc-done" : ""} ${iActive ? "pc-active" : ""}`}>
                       <div className="proc-orb">{p.icon}</div>
                       <div className="proc-name">{p.label}</div>
                       <div className="proc-hint">{p.hint}</div>
@@ -1731,7 +1708,6 @@ export default function Apply() {
               </div>
             </div>
 
-            {/* Main card */}
             <div className="main-card card-anim" key={animKey}>
               {activeStep === 0 && (
                 <Step0
@@ -1759,11 +1735,10 @@ export default function Apply() {
                   handlePayment={handlePayment}
                 />
               )}
-              {activeStep === 3 && <Step3 goStep={() => goStep(2)} />}
+              {activeStep === 3 && <Step3 reset={reset} />}
               {activeStep === 4 && <Step4 form={form} reset={reset} />}
             </div>
 
-            {/* Search Tracker (Moved Down) */}
             <div className="hero-header" style={{ animationDelay: '0.4s', marginTop: 40, marginBottom: 12 }}>
               <h2 style={{ fontSize: 24, fontWeight: 900, color: '#0f172a' }}>Already Applied? <em>Check Status</em></h2>
               <p>Enter your unique tracking ID to see your processing progress</p>

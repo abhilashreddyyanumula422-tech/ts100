@@ -55,7 +55,7 @@ const StudentRequests = () => {
       });
 
       // 2. Also Update Status in DB so student sees it on Waiting Screen
-      await updateStatus(replyingTo.email, "rejected", exactProblem);
+      await updateStatus(replyingTo.id, "rejected", exactProblem);
 
       if (res.ok) {
         alert("✅ Notification sent and Status updated to Rejected");
@@ -70,13 +70,12 @@ const StudentRequests = () => {
     }
   };
 
-  const updateStatus = async (email, newStatus, message = "", agent = null) => {
+  const updateStatus = async (id, newStatus, message = "", agent = null) => {
     try {
-      const res = await fetch(`${API_BASE}/api/update-status/`, {
+      const res = await fetch(`${API_BASE}/api/application/${id}/update-status/`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          email,
           status: newStatus,
           admin_message: message,
           agent: agent
@@ -387,7 +386,7 @@ ${companyName} Support Team` : "";
                           </button>
                           <button
                             onClick={() => {
-                              window.open(`http://192.168.1.43:8000/api/download/${doc.id}/`);
+                              window.open(`http://192.168.1.13:8000/api/download/${doc.id}/`);
                             }}
                             className="px-3 py-1.5 bg-slate-100 text-slate-600 rounded-lg text-xs font-bold hover:bg-slate-200 transition"
                           >
@@ -413,7 +412,7 @@ ${companyName} Support Team` : "";
                       onChange={(e) => setSelectedStudent({ ...selectedStudent, agent: e.target.value })}
                     />
                     <button
-                      onClick={() => updateStatus(selectedStudent.email, selectedStudent.status, selectedStudent.admin_message, selectedStudent.agent)}
+                      onClick={() => updateStatus(selectedStudent.id, selectedStudent.status, selectedStudent.admin_message, selectedStudent.agent)}
                       className="px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700 transition"
                     >
                       Assign
@@ -425,7 +424,7 @@ ${companyName} Support Team` : "";
                 <div className="pt-6 flex gap-4 border-t border-slate-100">
                   {/* ✅ APPROVE BUTTON */}
                   <button
-                    onClick={() => updateStatus(selectedStudent.email, "approved")}
+                    onClick={() => updateStatus(selectedStudent.id, "approved")}
                     disabled={selectedStudent.status === "approved"}
                     className={`flex-1 py-3 rounded-2xl font-bold flex items-center justify-center gap-2 shadow-lg transition 
       ${selectedStudent.status === "approved"
@@ -439,7 +438,7 @@ ${companyName} Support Team` : "";
 
                   {/* ✅ REJECT BUTTON */}
                   <button
-                    onClick={() => updateStatus(selectedStudent.email, "rejected")}
+                    onClick={() => updateStatus(selectedStudent.id, "rejected")}
                     disabled={selectedStudent.status === "rejected"}
                     className={`flex-1 py-3 rounded-2xl font-bold flex items-center justify-center gap-2 transition
                       ${selectedStudent.status === "rejected"

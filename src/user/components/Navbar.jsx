@@ -1,14 +1,21 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiChevronDown, FiMenu, FiX } from "react-icons/fi";
  
 const Navbar = () => {
   const [servicesDropdown, setServicesDropdown] = useState(false);
   const [collegesDropdown, setCollegesDropdown] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
-  const [mobileCollegesOpen, setMobileCollegesOpen] = useState(false);
- 
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  const isLoggedIn = !!user;
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    navigate("/logout");
+  };
+
   const navLinks = [
     { name: "HOME", path: "/" },
     { name: "ABOUT", path: "/about" },
@@ -155,12 +162,21 @@ const partneredColleges = [
         </div>
  
         <div className="hidden flex-shrink-0 items-center justify-end lg:flex">
-          <Link
-            to="/login"
-            className="rounded-full bg-[#3b82f6] px-6 py-2.5 text-sm font-bold text-white shadow-lg shadow-blue-500/20 transition-all hover:bg-blue-600 active:scale-95"
-          >
-            LOGIN
-          </Link>
+          {isLoggedIn ? (
+            <button
+              onClick={handleLogout}
+              className="rounded-full bg-red-500 px-6 py-2.5 text-sm font-bold text-white shadow-lg shadow-red-500/20 transition-all hover:bg-red-600 active:scale-95"
+            >
+              LOGOUT
+            </button>
+          ) : (
+            <Link
+              to="/login"
+              className="rounded-full bg-[#3b82f6] px-6 py-2.5 text-sm font-bold text-white shadow-lg shadow-blue-500/20 transition-all hover:bg-blue-600 active:scale-95"
+            >
+              LOGIN
+            </Link>
+          )}
         </div>
  
         <div className="lg:hidden">
@@ -249,13 +265,22 @@ const partneredColleges = [
             </li>
  
             <li className="border-t border-white/10 pt-4">
-              <Link
-                to="/login"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="block w-full rounded-2xl bg-[#3b82f6] py-4 text-center shadow-lg"
-              >
-                LOGIN / REGISTER
-              </Link>
+              {isLoggedIn ? (
+                <button
+                  onClick={handleLogout}
+                  className="block w-full rounded-2xl bg-red-500 py-4 text-center shadow-lg"
+                >
+                  LOGOUT
+                </button>
+              ) : (
+                <Link
+                  to="/login"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block w-full rounded-2xl bg-[#3b82f6] py-4 text-center shadow-lg"
+                >
+                  LOGIN / REGISTER
+                </Link>
+              )}
             </li>
           </ul>
         </div>

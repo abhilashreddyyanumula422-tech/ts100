@@ -14,7 +14,7 @@ const CollegeRequest = () => {
 
   const fetchColleges = async () => {
     try {
-      const res = await fetch("http://192.168.1.43:8000/api/allcolleges/");
+      const res = await fetch("http://192.168.1.13:8000/api/allcolleges/");
 
       if (!res.ok) {
         throw new Error("Failed to fetch");
@@ -56,7 +56,7 @@ const CollegeRequest = () => {
 
     try {
       const res = await fetch(
-        "http://192.168.1.43:8000/api/add_college/", {
+        "http://192.168.1.13:8000/api/add_college/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -92,7 +92,7 @@ const CollegeRequest = () => {
   const fetchCertificates = async (collegeId) => {
     try {
       const res = await fetch(
-        `http://192.168.1.43:8000/api/colleges/${collegeId}/certificates/`
+        `http://192.168.1.13:8000/api/colleges/${collegeId}/certificates/`
       );
 
       const data = await res.json();
@@ -111,7 +111,7 @@ const CollegeRequest = () => {
   const updateCertificate = async (certId, updatedCert) => {
     try {
       const res = await fetch(
-        `http://192.168.1.43:8000/api/certificates/${certId}/`,
+        `http://192.168.1.13:8000/api/certificates/${certId}/`,
         {
           method: "PUT",
           headers: {
@@ -132,7 +132,7 @@ const CollegeRequest = () => {
   const deleteCertificate = async (certId) => {
     try {
       const res = await fetch(
-        `http://192.168.1.43:8000/api/certificates/${certId}/`,
+        `http://192.168.1.13:8000/api/certificates/${certId}/`,
         {
           method: "DELETE",
         }
@@ -397,7 +397,7 @@ const CollegeRequest = () => {
                               college: editingCollege.id,
                             };
 
-                            const res = await fetch("http://192.168.1.43:8000/api/add_certificate/", {
+                            const res = await fetch("http://192.168.1.13:8000/api/add_certificate/", {
                               method: "POST",
                               headers: { "Content-Type": "application/json" },
                               body: JSON.stringify(newCert),
