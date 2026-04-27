@@ -124,10 +124,10 @@ export default function Contact() {
         </div>
 
         <div className="relative z-10 max-w-4xl mx-auto space-y-3 sm:space-y-4 md:space-y-6">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-black text-black tracking-tighter">
+          <h1 className="text-5xl md:text-6xl font-black text-black tracking-tight">
             Get in <span className="text-[#60a5fa]">Touch</span>
           </h1>
-          <p className="text-black-300 text-sm sm:text-base md:text-xl font-medium max-w-2xl mx-auto leading-relaxed opacity-90">
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed font-medium opacity-90">
             Have questions about your transcripts? Our team is here to help you navigate your academic journey worldwide.
           </p>
         </div>

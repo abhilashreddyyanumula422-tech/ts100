@@ -172,6 +172,16 @@ import {
   FaYoutube,
   FaLinkedinIn,
 } from "react-icons/fa";
+import cesLogo from "../../assets/CES.png";
+import eceLogo from "../../assets/ECE.png";
+import enicLogo from "../../assets/ENIC.png";
+import icasLogo from "../../assets/ICAS.png";
+import ieeLogo from "../../assets/IEE-1.png";
+import iqasLogo from "../../assets/IQAS.png";
+import nasabLogo from "../../assets/NASAB.png";
+import pebcLogo from "../../assets/PEBC.png";
+import spantraLogo from "../../assets/Spantra.png";
+import wesLogo from "../../assets/WES.png";
 
 const serviceLinks = [
   { name: "Credential Evaluation", path: "/services" },
@@ -216,6 +226,19 @@ const socialLinks = [
   },
 ];
 
+const agencies = [
+  { name: "World Education Services (WES)", short: "WES", logo: wesLogo },
+  { name: "Educational Credential Evaluators (ECE)", short: "ECE", logo: eceLogo },
+  { name: "International Education Evaluations (IEE)", short: "IEE", logo: ieeLogo },
+  { name: "SpanTran", short: "SpanTran", logo: spantraLogo },
+  { name: "IQAS Canada", short: "IQAS", logo: iqasLogo },
+  { name: "UK ENIC / NARIC", short: "NARIC", logo: enicLogo },
+  { name: "CES", short: "CES", logo: cesLogo },
+  { name: "ICAS", short: "ICAS", logo: icasLogo },
+  { name: "NASAB", short: "NASAB", logo: nasabLogo },
+  { name: "PEBC", short: "PEBC", logo: pebcLogo },
+];
+
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   const [openPolicy, setOpenPolicy] = useState(false);
@@ -224,6 +247,27 @@ const Footer = () => {
 
   return (
     <footer className="bg-[#243b5a] text-white">
+      <style>{`
+        @keyframes scroll {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+        .scroll-container {
+          overflow: hidden;
+          white-space: nowrap;
+        }
+        .scroll-content {
+          display: inline-flex;
+          animation: scroll 20s linear infinite;
+        }
+        .scroll-content:hover {
+          animation-play-state: paused;
+        }
+      `}</style>
       <div className="mx-auto max-w-7xl px-4 py-8 md:px-6 md:py-10 lg:px-12">
         <div className="grid gap-6 border-b border-white/10 pb-6 md:gap-8 md:pb-8 sm:grid-cols-2 lg:grid-cols-4">
           <div className="sm:col-span-2 lg:col-span-1">
@@ -399,49 +443,45 @@ const Footer = () => {
         <div className="flex flex-col gap-2 pt-4 text-xs text-blue-100/70 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-center sm:text-left">© {currentYear} 100 Transcripts LLP. All rights reserved.</p>
 
-<div className="flex flex-col sm:flex-row gap-2 sm:gap-4 text-center sm:text-right">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 text-center sm:text-right">
+            <button
+              onClick={() => setOpenTerms(true)}
+              className="py-2 px-2 transition hover:text-white min-h-[44px] flex items-center justify-center sm:justify-end"
+            >
+              Terms & Conditions
+            </button>
 
-  <button
-  onClick={() => setOpenTerms(true)}
-  className="py-2 px-2 transition hover:text-white min-h-[44px] flex items-center justify-center sm:justify-end"
->
-  Terms & Conditions
-</button>
+            <button
+              onClick={() => setOpenPolicy(true)}
+              className="py-2 px-2 transition hover:text-white min-h-[44px] flex items-center justify-center sm:justify-end"
+            >
+              Privacy Policy
+            </button>
 
-  <button
-  onClick={() => setOpenPolicy(true)}
-  className="py-2 px-2 transition hover:text-white min-h-[44px] flex items-center justify-center sm:justify-end"
->
-  Privacy Policy
-</button>
-
-  <button
-  onClick={() => setOpenRefund(true)}
-  className="py-2 px-2 transition hover:text-white min-h-[44px] flex items-center justify-center sm:justify-end"
->
-  Refund & Cancellation
-</button>
-
-</div>
+            <button
+              onClick={() => setOpenRefund(true)}
+              className="py-2 px-2 transition hover:text-white min-h-[44px] flex items-center justify-center sm:justify-end"
+            >
+              Refund & Cancellation
+            </button>
+          </div>
         </div>
       </div>
 
+      <PrivacyPolicy
+        open={openPolicy}
+        onClose={() => setOpenPolicy(false)}
+      />
 
-              <PrivacyPolicy
-  open={openPolicy}
-  onClose={() => setOpenPolicy(false)}
-/>
+      <RefundCancellation
+        open={openRefund}
+        onClose={() => setOpenRefund(false)}
+      />
 
-<RefundCancellation
-  open={openRefund}
-  onClose={() => setOpenRefund(false)}
-/>
-
-<TermsConditions
-  open={openTerms}
-  onClose={() => setOpenTerms(false)}
-/>
-
+      <TermsConditions
+        open={openTerms}
+        onClose={() => setOpenTerms(false)}
+      />
 
     </footer>
 

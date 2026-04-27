@@ -13,6 +13,11 @@ import Register from "../user/pages/Register";
 import Login from "../user/pages/login";
 import Apply from "../user/pages/Apply";
 import Logout from "../user/pages/Logout";
+import Transcripts from "../user/pages/Transcripts";
+import ProvisionalCertificate from "../user/pages/ProvisionalCertificate";
+import OriginalDegree from "../user/pages/OriginalDegree";
+import MOICertificate from "../user/pages/MOICertificate";
+import CMM from "../user/pages/CMM";
 
 /* ✅ NEW DYNAMIC PAGE */
 import CollegePage from "../user/pages/CollegePage";
@@ -47,8 +52,15 @@ const AppRoutes = () => {
           <Route path="login" element={<Login />} />
           <Route path="logout" element={<Logout />} />
 
+          {/* Certificate Service Routes */}
+          <Route path="services/transcripts" element={<Transcripts />} />
+          <Route path="services/pc" element={<ProvisionalCertificate />} />
+          <Route path="services/od" element={<OriginalDegree />} />
+          <Route path="services/moi" element={<MOICertificate />} />
+          <Route path="services/cmm" element={<CMM />} />
+
           {/* ✅ DYNAMIC COLLEGE ROUTE */}
-          <Route path="partnered-colleges/:collegeId" element={<CollegePage />} />
+          {/* <Route path="partnered-colleges/:collegeId" element={<CollegePage />} /> */}
 
         </Route>
 
