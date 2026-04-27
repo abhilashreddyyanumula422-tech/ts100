@@ -184,33 +184,33 @@ const partneredColleges = [
         <div className="lg:hidden">
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="rounded-lg p-2 text-white transition-colors hover:bg-white/10"
+            className="rounded-lg p-2 text-white transition-colors hover:bg-white/10 min-h-[44px] min-w-[44px] flex items-center justify-center"
           >
             {isMobileMenuOpen ? <FiX size={28} /> : <FiMenu size={28} />}
           </button>
         </div>
       </div>
- 
+
       {isMobileMenuOpen && (
         <div className="animate-in slide-in-from-top border-t border-white/10 bg-[#2f4a6d] shadow-2xl duration-300 lg:hidden">
-          <ul className="flex flex-col space-y-3 p-6 font-bold tracking-tight">
+          <ul className="flex flex-col space-y-3 p-4 sm:p-6 font-bold tracking-tight">
             {navLinks.map((link) => (
               <li key={link.name}>
                 <Link
                   to={link.path}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="block py-2 transition-colors hover:text-blue-300"
+                  className="flex items-center py-3 px-2 transition-colors hover:text-blue-300 min-h-[44px]"
                 >
                   {link.name}
                 </Link>
               </li>
             ))}
- 
+
             <li>
               <button
                 type="button"
                 onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
-                className="flex w-full items-center justify-between py-2 text-left transition-colors hover:text-blue-300"
+                className="flex w-full items-center justify-between py-3 px-2 text-left transition-colors hover:text-blue-300 min-h-[44px]"
               >
                 <span>SERVICES</span>
                 <FiChevronDown
@@ -219,7 +219,7 @@ const partneredColleges = [
                   }`}
                 />
               </button>
- 
+
               {mobileServicesOpen && (
                 <div className="mt-2 space-y-2 rounded-xl bg-white/5 p-3">
                   {servicesLinks.map((item) => (
@@ -227,7 +227,7 @@ const partneredColleges = [
                       key={item.name}
                       to={item.path}
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="block rounded-lg px-3 py-2 text-sm text-white/90 transition hover:bg-white/10 hover:text-blue-300"
+                      className="block rounded-lg px-3 py-3 text-sm text-white/90 transition hover:bg-white/10 hover:text-blue-300 min-h-[44px]"
                     >
                       {item.name}
                     </Link>
@@ -235,12 +235,12 @@ const partneredColleges = [
                 </div>
               )}
             </li>
- 
+
             <li>
               <button
                 type="button"
                 onClick={() => setMobileCollegesOpen(!mobileCollegesOpen)}
-                className="flex w-full items-center justify-between py-2 text-left transition-colors hover:text-blue-300"
+                className="flex w-full items-center justify-between py-3 px-2 text-left transition-colors hover:text-blue-300 min-h-[44px]"
               >
                 <span>PARTNERED COLLEGES</span>
                 <FiChevronDown
@@ -249,7 +249,7 @@ const partneredColleges = [
                   }`}
                 />
               </button>
- 
+
               {mobileCollegesOpen && (
                 <div className="mt-2 space-y-2 rounded-xl bg-white/5 p-3">
                   {partneredColleges.map((college) => (
@@ -257,7 +257,7 @@ const partneredColleges = [
                       key={college.name}
                       to={college.path}
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="block rounded-lg px-3 py-2 text-sm text-white/90 transition hover:bg-white/10 hover:text-blue-300"
+                      className="block rounded-lg px-3 py-3 text-sm text-white/90 transition hover:bg-white/10 hover:text-blue-300 min-h-[44px]"
                     >
                       {college.name}
                     </Link>
@@ -265,12 +265,12 @@ const partneredColleges = [
                 </div>
               )}
             </li>
- 
+
             <li className="border-t border-white/10 pt-4">
               {isLoggedIn ? (
                 <button
                   onClick={handleLogout}
-                  className="block w-full rounded-2xl bg-red-500 py-4 text-center shadow-lg"
+                  className="block w-full rounded-2xl bg-red-500 py-4 text-center shadow-lg min-h-[48px]"
                 >
                   LOGOUT
                 </button>
@@ -278,7 +278,7 @@ const partneredColleges = [
                 <Link
                   to="/login"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="block w-full rounded-2xl bg-[#3b82f6] py-4 text-center shadow-lg"
+                  className="block w-full rounded-2xl bg-[#3b82f6] py-4 text-center shadow-lg min-h-[48px]"
                 >
                   LOGIN / REGISTER
                 </Link>
@@ -290,7 +290,7 @@ const partneredColleges = [
     </nav>
   );
 };
- 
+
 export default Navbar;
  
  

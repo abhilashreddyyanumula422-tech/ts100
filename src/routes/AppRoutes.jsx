@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ScrollToTop from "../components/ScrollToTop";
 
 /* ================= USER ================= */
 import MainLayout from "../user/layout/MainLayout";
@@ -29,6 +30,7 @@ import EmailNotificationTemplate from "../Admin/pages/EmailNotificationTemplate"
 const AppRoutes = () => {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
 
         {/* ================= USER ROUTES ================= */}

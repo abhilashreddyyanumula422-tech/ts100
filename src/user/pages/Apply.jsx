@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
+import { getErrorMessage, validateForm } from "../../utils/validation";
 // NOTE: Replace this import with your actual image path
 // import flowImage from "../../assets/flow1.png";
 const flowImage = null; // placeholder — swap with your import
@@ -434,12 +435,27 @@ html, body, #root {
 .field { display:flex; flex-direction:column; gap:6px; }
 .field label { font-size:12.5px; font-weight:700; color:#374151; }
 .field input, .field select {
-  padding:11px 13px; border:1.5px solid #e2e8f0; border-radius:10px;
-  font-size:14px; font-family:inherit; outline:none; color:#1e293b; background:#fff;
-  transition:border .2s,box-shadow .2s;
-  -webkit-appearance: none;
+  padding: 10px 12px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.2s;
 }
 .field input:focus,.field select:focus { border-color:#3b82f6; box-shadow:0 0 0 3px rgba(59,130,246,.1); }
+.field input.error, .field select.error {
+  border-color: #ef4444;
+  background-color: #fef2f2;
+}
+.field input.error:focus, .field select.error:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+.error-message {
+  font-size: 11px;
+  color: #ef4444;
+  font-weight: 600;
+  margin-top: 2px;
+}
 .req { color:#ef4444; }
 
 .sec-title { font-size:15px; font-weight:800; color:#1e293b; margin:24px 0 12px; display:flex; align-items:center; gap:10px; }
@@ -1049,7 +1065,7 @@ const UpBlock = ({ type, label, options, upProg, upNames, upCompressed, onFile, 
 /* ─────────────────────────────────────────
    STEP COMPONENTS
 ───────────────────────────────────────── */
-const Step0 = ({ form, onChange, degrees, addDeg, rmDeg, chDeg, upProg, upNames, upCompressed, onFile, delFile, onDigiLocker, onSubmit, adminMessage }) => (
+const Step0 = ({ form, onChange, degrees, addDeg, rmDeg, chDeg, upProg, upNames, upCompressed, onFile, delFile, onDigiLocker, onSubmit, adminMessage, errors, handleBlur }) => (
   <form onSubmit={onSubmit}>
     {adminMessage && (
       <div className="info-panel amber" style={{ marginBottom: 24, border: "2px solid #fbbf24" }}>
@@ -1072,8 +1088,8 @@ const Step0 = ({ form, onChange, degrees, addDeg, rmDeg, chDeg, upProg, upNames,
     <div className="sec-title">Personal Information</div>
     <div className="form-grid">
       {[
-        { id: "fullName", label: "Full Name", type: "text", ph: "e.g. Ravi Kumar", req: true },
-        { id: "email", label: "Email Address", type: "email", ph: "email@example.com", req: true },
+        { id: "fullName", label: "Full Name", type: "text", ph: "e.g. Ravi Kumar (exactly 30 letters & spaces only)", req: true },
+        { id: "email", label: "Email Address", type: "email", ph: "email@example.com (no emojis)", req: true },
         { id: "phone", label: "Phone Number", type: "tel", ph: "+91 98765 43210", req: true },
         { id: "altPhone", label: "Alternative Number", type: "tel", ph: "+91 98765 43210", req: true },
       ].map(({ id, label, type, ph, req }) => (
@@ -1084,20 +1100,24 @@ const Step0 = ({ form, onChange, degrees, addDeg, rmDeg, chDeg, upProg, upNames,
             name={id}
             value={form[id]}
             onChange={onChange}
+            onBlur={handleBlur}
             placeholder={ph}
             autoComplete="off"
             inputMode={type === "tel" ? "numeric" : undefined}
+            className={errors[id] ? "error" : ""}
           />
+          {errors[id] && <div className="error-message">{errors[id]}</div>}
         </div>
       ))}
       <div className="field">
         <label>Select Requirement <span className="req">*</span></label>
-        <select name="requirement" value={form.requirement} onChange={onChange}>
+        <select name="requirement" value={form.requirement} onChange={onChange} onBlur={handleBlur} className={errors.requirement ? "error" : ""}>
           <option value="">— Choose Service —</option>
           <option value="Transcripts">Transcripts</option>
           <option value="WES">WES</option>
           <option value="Genuineness">Genuineness</option>
         </select>
+        {errors.requirement && <div className="error-message">{errors.requirement}</div>}
       </div>
       <div className="field">
         <label>Reference Number</label>
@@ -1209,32 +1229,125 @@ const Step0 = ({ form, onChange, degrees, addDeg, rmDeg, chDeg, upProg, upNames,
   </form>
 );
 
-const Step1 = ({ form, goStep, handlePayment }) => (
-  <div>
-    <div className="step-header">
-      <div className="step-icon icon-amber">💳</div>
-      <div>
-        <div className="step-title">Secure Payment</div>
-        <div className="step-subtitle">Complete your payment to begin document processing</div>
+const Step1 = ({ form, goStep, handlePayment }) => {
+  return (
+    <div>
+      {/* HEADER */}
+      <div className="step-header">
+        <div className="step-icon icon-amber">💳</div>
+        <div>
+          <div className="step-title">Secure Payment</div>
+          <div className="step-subtitle">
+            Complete your payment to start processing
+          </div>
+        </div>
+      </div>
+
+      {/* PAYMENT CARD */}
+      <div style={{
+        background: "#fff",
+        borderRadius: "20px",
+        padding: "24px",
+        boxShadow: "0 10px 40px rgba(0,0,0,0.08)",
+        border: "1px solid #e2e8f0",
+        marginBottom: "20px"
+      }}>
+
+        {/* PRICE */}
+        <div style={{ textAlign: "center" }}>
+          <h2 style={{ fontSize: "28px", fontWeight: "900", color: "#1e293b" }}>
+            ₹ 1
+          </h2>
+          <p style={{ color: "#64748b", fontSize: "13px" }}>
+            One-time processing fee
+          </p>
+        </div>
+
+        {/* USER INFO */}
+        <div style={{
+          marginTop: "20px",
+          background: "#f8fafc",
+          padding: "14px",
+          borderRadius: "12px",
+          border: "1px solid #e2e8f0"
+        }}>
+          <p style={{ fontSize: "13px", fontWeight: "700" }}>👤 {form.fullName}</p>
+          <p style={{ fontSize: "12px", color: "#64748b" }}>{form.email}</p>
+          <p style={{ fontSize: "12px", color: "#64748b" }}>{form.phone}</p>
+        </div>
+
+        {/* FEATURES */}
+        <div style={{ marginTop: "20px" }}>
+          {[
+            "Secure Payment Gateway",
+            "Instant Confirmation",
+            "Fast Processing (24-48 hrs)",
+            "Refund Support Available"
+          ].map((item, i) => (
+            <div key={i} style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              fontSize: "13px",
+              marginBottom: "6px",
+              color: "#334155"
+            }}>
+              ✅ {item}
+            </div>
+          ))}
+        </div>
+
+        {/* PAY BUTTON */}
+        <button
+          onClick={handlePayment}
+          style={{
+            width: "100%",
+            marginTop: "20px",
+            padding: "14px",
+            borderRadius: "12px",
+            border: "none",
+            fontSize: "15px",
+            fontWeight: "800",
+            background: "linear-gradient(135deg,#22c55e,#16a34a)",
+            color: "#fff",
+            cursor: "pointer",
+            transition: "0.3s"
+          }}
+        >
+          💳 Pay ₹1 Securely
+        </button>
+
+        {/* BACK BUTTON */}
+        <button
+          onClick={() => goStep(0)}
+          style={{
+            width: "100%",
+            marginTop: "10px",
+            padding: "12px",
+            borderRadius: "10px",
+            border: "none",
+            background: "#f1f5f9",
+            fontWeight: "600",
+            cursor: "pointer"
+          }}
+        >
+          ← Back
+        </button>
+      </div>
+
+      {/* TRUST BADGES */}
+      <div style={{
+        display: "flex",
+        justifyContent: "center",
+        gap: "16px",
+        fontSize: "12px",
+        color: "#64748b"
+      }}>
+        🔒 SSL Secure &nbsp;|&nbsp; ⚡ Razorpay Powered &nbsp;|&nbsp; 🇮🇳 India Payments
       </div>
     </div>
-    <div className="info-panel amber">
-      <span className="info-icon">🔒</span>
-      <h3>Service Fee</h3>
-      <div className="amount">₹ 1,500</div>
-      <p>One-time fee for verification, attestation &amp; processing.<br />100% Secure &bull; Instant confirmation</p>
-    </div>
-    <div className="timeline">
-      <TlItem icon="✅" bg="#dcfce7" title="Documents Received" desc="All your documents submitted successfully." badge="bdone" />
-      <TlItem icon="💳" bg="#fef3c7" title="Payment Required" desc="Complete payment to unlock document review." badge="bprog" />
-      <TlItem icon="🔍" bg="#f1f5f9" title="Document Review" desc="Our team verifies your documents (24–48 hrs)." badge="bwait" last />
-    </div>
-    <div className="actions">
-      <button className="btn-secondary" onClick={() => goStep(0)}>← Back</button>
-      <button className="btn-primary green" onClick={handlePayment}>💳 &nbsp;Pay ₹1,500 Now</button>
-    </div>
-  </div>
-);
+  );
+};
 
 const Step2 = ({ appStatus, adminMessage, goStep, onRetry }) => {
   const isPending = appStatus === "pending";
@@ -1318,7 +1431,38 @@ const Step2 = ({ appStatus, adminMessage, goStep, onRetry }) => {
     </div>
   );
 };
+const PaymentSuccess = () => {
+  return (
+    <div className="success-wrap" style={{ textAlign: "center" }}>
+      <div style={{ fontSize: "60px" }}>🎉</div>
 
+      <h2 style={{
+        fontSize: "24px",
+        fontWeight: "900",
+        marginTop: "10px",
+        color: "#16a34a"
+      }}>
+        Payment Successful
+      </h2>
+
+      <p style={{ color: "#64748b", marginTop: "6px" }}>
+        Your documents are now under processing
+      </p>
+
+      <div style={{
+        marginTop: "20px",
+        padding: "16px",
+        background: "#f0fdf4",
+        borderRadius: "12px",
+        border: "1px solid #bbf7d0"
+      }}>
+        ✅ Payment Received <br />
+        📄 Processing Started <br />
+        🚚 Delivery in 24-48 hrs
+      </div>
+    </div>
+  );
+};
 const Step3 = ({ reset }) => (
   <div>
     <div className="step-header">
@@ -1401,6 +1545,18 @@ export default function Apply() {
       specialCondition: false,
     };
   });
+
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
+
+  const validationRules = {
+    fullName: { required: true, label: 'Full Name', minLength: 30, maxLength: 30, lettersOnly: true },
+    email: { required: true, email: true, label: 'Email Address', noEmojis: true },
+    phone: { required: true, phone: true, label: 'Phone Number' },
+    altPhone: { required: true, phone: true, label: 'Alternate Phone' },
+    requirement: { required: true, label: 'Requirement' },
+    termsAccepted: { required: true, label: 'Terms and Conditions' },
+  };
 
   const [upProg, setUpProg] = useState({ cmm: 0, degree: 0, internship: 0 });
   const [upNames, setUpNames] = useState({ cmm: null, degree: null, internship: null });
@@ -1501,10 +1657,32 @@ export default function Apply() {
     return () => clearInterval(interval);
   }, [activeStep, applicationId, API_BASE, goStep]);
 
-  const onChange = useCallback((e) => {
+  const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setForm(f => ({ ...f, [name]: type === "checkbox" ? checked : value }));
-  }, []);
+
+    // Real-time validation on change
+    if (touched[name]) {
+      const fieldError = getErrorMessage(
+        validationRules[name].label,
+        type === "checkbox" ? checked : value,
+        validationRules[name]
+      );
+      setErrors({ ...errors, [name]: fieldError });
+    }
+  };
+
+  const handleBlur = (e) => {
+    const { name, value, type, checked } = e.target;
+    setTouched({ ...touched, [name]: true });
+
+    const fieldError = getErrorMessage(
+      validationRules[name].label,
+      type === "checkbox" ? checked : value,
+      validationRules[name]
+    );
+    setErrors({ ...errors, [name]: fieldError });
+  };
 
   const addDeg = useCallback(() => {
     const id = Math.max(0, ...degrees.map(d => d.id)) + 1;
@@ -1522,6 +1700,30 @@ export default function Apply() {
   const onFile = useCallback((type) => async (e) => {
     const file = e.target.files[0];
     if (!file) return;
+
+    // Validate file type
+    const validTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
+    if (!validTypes.includes(file.type)) {
+      alert("Please upload only PDF, JPG, or PNG files");
+      e.target.value = '';
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    const maxSize = 5 * 1024 * 1024;
+    if (file.size > maxSize) {
+      alert("File size must be less than 5MB. Please compress your document.");
+      e.target.value = '';
+      return;
+    }
+
+    // Warn about document clarity
+    const clarityConfirmed = confirm("Please ensure your document is:\n• Clear and readable\n• Not blurry or distorted\n• All text is visible\n\nClick OK to confirm your document is clear, or Cancel to select a different file.");
+    if (!clarityConfirmed) {
+      e.target.value = '';
+      return;
+    }
+
     setUpNames(p => ({ ...p, [type]: file.name }));
     setUpProg(p => ({ ...p, [type]: 5 }));
     const result = await compressImage(file);
@@ -1562,8 +1764,13 @@ export default function Apply() {
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    if (!form.fullName || !form.email || !form.phone || !form.altPhone || !form.requirement || !form.termsAccepted) {
-      alert("Please fill all required fields (*) and accept Terms");
+    // Validate all fields
+    const { errors: validationErrors, isValid } = validateForm(form, validationRules);
+    setErrors(validationErrors);
+    setTouched({ fullName: true, email: true, phone: true, altPhone: true, requirement: true, termsAccepted: true });
+
+    if (!isValid) {
+      alert("Please fix the errors before submitting");
       return;
     }
 
@@ -1602,84 +1809,75 @@ export default function Apply() {
     }
   };
 
-  const handlePayment = async () => {
-    try {
-      // Check if Razorpay is loaded
-      if (!window.Razorpay) {
-        alert("Payment system is loading. Please wait and try again.");
-        return;
-      }
+const handlePayment = async () => {
+  const res = await loadRazorpay();
 
-      // Validate applicationId exists
-      if (!applicationId) {
-        alert("No application found. Please submit an application first.");
-        return;
-      }
+  if (!res) {
+    alert("Razorpay SDK failed to load");
+    return;
+  }
 
-      // Creating payment order for application
-      
-      const res = await fetch(`${API_BASE}/api/create-order/`, {
+  // 🔥 Call Django backend
+  const orderData = await fetch("http://192.168.1.43:8000/api/create-order/")
+    .then((res) => res.json());
+
+  const options = {
+    key: orderData.key,
+    amount: orderData.amount,
+    currency: "INR",
+    name: "100 Transcripts",
+    description: "Document Processing Fee",
+    order_id: orderData.order_id,
+
+    handler: async function (response) {
+      // 🔐 Verify payment
+      const verifyRes = await fetch("http://192.168.1.43:8000/api/verify-payment/", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: 1500, application_id: applicationId }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          order_id: response.razorpay_order_id,
+          payment_id: response.razorpay_payment_id,
+          signature: response.razorpay_signature,
+        }),
       });
 
-      if (!res.ok) {
-        const errorData = await res.json();
-        // Create order error handled
-        alert(`Failed to create payment order: ${errorData.error || 'Unknown error'}`);
-        return;
-      }
+      const data = await verifyRes.json();
 
-      const data = await res.json();
-      // Order created successfully
-      
-      const options = {
-        key: "rzp_test_Sg6qpBoNrt75cC",
-        amount: data.amount,
-        currency: "INR",
-        order_id: data.order_id,
-        name: "100 Transcripts",
-        description: "Document Verification Fee",
-        handler: async function (response) {
-          // Payment response received
-          try {
-            const verifyRes = await fetch(`${API_BASE}/api/verifys/`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ ...response, application_id: applicationId }),
-            });
-            const verifyData = await verifyRes.json();
-            if (verifyData.status === "success") {
-              alert("Payment Successful ✅");
-              goStep(3);
-            }
-            else {
-              // Payment verification failed
-              alert("Payment verification failed ❌");
-            }
-          } catch (verifyErr) {
-            // Verification error handled
-            alert("Payment verification error ❌");
-          }
-        },
-        prefill: { name: form.fullName, email: form.email, contact: form.phone },
-        theme: { color: "#2563eb" },
-        modal: {
-          ondismiss: function() {
-            // Payment modal dismissed
-          }
-        }
-      };
-      
-      const rzp = new window.Razorpay(options);
-      rzp.open();
-    } catch (err) {
-      // Payment error handled
-      alert(`Payment error: ${err.message || 'Please ensure backend is running and try again.'}`);
-    }
+      if (data.status === "success") {
+        alert("Payment Successful ✅");
+
+        // 👉 Move to next step (important)
+        goStep(2); // or success step
+      } else {
+        alert("Payment Failed ❌");
+      }
+    },
+
+    prefill: {
+      name: form.fullName,
+      email: form.email,
+      contact: form.phone,
+    },
+
+    theme: {
+      color: "#3b82f6",
+    },
   };
 
+  const paymentObject = new window.Razorpay(options);
+  paymentObject.open();
+};
+const loadRazorpay = () => {
+  return new Promise((resolve) => {
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+};
   const reset = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     const userData = user?.data || {};
@@ -1750,13 +1948,15 @@ export default function Apply() {
             <div className="main-card card-anim" key={animKey}>
               {activeStep === 0 && (
                 <Step0
-                  form={form} onChange={onChange}
+                  form={form} onChange={handleChange}
                   degrees={degrees} addDeg={addDeg} rmDeg={rmDeg} chDeg={chDeg}
                   upProg={upProg} upNames={upNames} upCompressed={upCompressed}
                   onFile={onFile} delFile={delFile}
                   onDigiLocker={openDigiLocker}
                   onSubmit={onSubmit}
                   adminMessage={adminMessage}
+                  errors={errors}
+                  handleBlur={handleBlur}
                 />
               )}
               {activeStep === 1 && (
@@ -1768,11 +1968,11 @@ export default function Apply() {
                 />
               )}
               {activeStep === 2 && (
-                <Step1
-                  form={form}
-                  goStep={() => goStep(1)}
-                  handlePayment={handlePayment}
-                />
+               <Step1
+  form={form}
+  goStep={goStep}
+  handlePayment={handlePayment}
+/>
               )}
               {activeStep === 3 && <Step3 reset={reset} />}
               {activeStep === 4 && <Step4 form={form} reset={reset} />}
